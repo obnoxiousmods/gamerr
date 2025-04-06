@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Game Downloader</title>
+  <script src="/static/scripts.js" defer></script>
+  <link rel="stylesheet" href="https://unpkg.com/98.css" />
+
+  <style>
+    body {
+      font-family: sans-serif;
+      margin: 2rem;
+      background: silver;
+    }
+    .window {
+      width: 600px;
+      padding: 1rem;
+    }
+    #searchBox {
+      width: 100%;
+      box-sizing: border-box;
+    }
+    .result {
+      margin: 0.5rem 0;
+      padding: 0.5rem;
+    }
+    .fixed-progress {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: #c0c0c0;
+      border-top: 2px solid white;
+      border-bottom: 2px solid gray;
+      padding: 0.5rem;
+      z-index: 999;
+    }
+    .progress-bar {
+      height: 20px;
+      background: navy;
+      color: white;
+      text-align: center;
+    }
+    .result-container {
+      max-height: 400px;
+      overflow-y: auto;
+    }
+  </style>
+</head>
+<body>
+  <div class="window" style="margin: 0 auto;">
+    <div class="title-bar">
+      <div class="title-bar-text">Game Downloader</div>
+    </div>
+    <div class="window-body">
+      <p>Search for a game:</p>
+      <input id="searchBox" class="input" type="text" placeholder="Mario, Zelda, etc..." />
+      <div class="result-container">
+        <div id="results"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="fixed-progress">
+    <div id="downloadProgress" class="progress-bar" style="width: 0%;">0%</div>
+  </div>
+</body>
+</html>
