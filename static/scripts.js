@@ -1,19 +1,38 @@
 const ws = new WebSocket(`${location.protocol === 'https:' ? 'wss' : 'ws'}://${location.host}/ws`);
 
+function setSearchState(disabled, text = "Search") {
+  const btn = document.getElementById("searchBtn");
+  const box = document.getElementById("searchBox");
+  btn.disabled = disabled;
+  box.disabled = disabled;
+  btn.textContent = text;
+}
 
 function doSearch() {
   const query = document.getElementById("searchBox").value.trim();
+  const errorBox = document.getElementById("errorBox");
   if (!query) return;
+
+  // Clear previous errors and results
+  errorBox.style.display = "none";
+  document.getElementById("results").innerHTML = "";
+
+  setSearchState(true, "Searching...");
   ws.send(JSON.stringify({ command: "search", data: { search: query } }));
-  document.getElementById("errorBox").style.display = "none";
 }
 
 ws.onmessage = (event) => {
   const msg = JSON.parse(event.data);
+  const errorBox = document.getElementById("errorBox");
 
   if (msg.type === "search_results") {
     const resultsDiv = document.getElementById("results");
     resultsDiv.innerHTML = "";
+
+    if (msg.results.length === 0) {
+      resultsDiv.textContent = "No results found.";
+    }
+
     msg.results.forEach(game => {
       const div = document.createElement("div");
       div.className = "result field-row-stacked";
@@ -30,6 +49,14 @@ ws.onmessage = (event) => {
       div.appendChild(btn);
       resultsDiv.appendChild(div);
     });
+
+    setSearchState(false);
+  }
+
+  if (msg.type === "download_error" || msg.type === "search_error") {
+    errorBox.textContent = `Error: ${msg.error || "Search failed."}`;
+    errorBox.style.display = "block";
+    setSearchState(false);
   }
 
   if (msg.type === "progress") {
@@ -41,20 +68,18 @@ ws.onmessage = (event) => {
   if (msg.type === "download_complete") {
     alert(`Download complete: ${msg.file}`);
   }
-
-  if (msg.type === "download_error") {
-    const errorBox = document.getElementById("errorBox");
-    errorBox.textContent = `Error: ${msg.error}`;
-    errorBox.style.display = "block";
-  }
 };
 
 window.onload = () => {
   document.getElementById("searchBox").addEventListener("keydown", e => {
-    if (e.key === "Enter") doSearch();
+    if (e.key === "Enter" && !e.target.disabled) {
+      doSearch();
+    }
   });
 
   document.getElementById("searchBtn").addEventListener("click", () => {
-    doSearch();
+    if (!document.getElementById("searchBtn").disabled) {
+      doSearch();
+    }
   });
 };
