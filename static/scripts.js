@@ -1,4 +1,5 @@
-const ws = new WebSocket(`ws://${location.host}/ws`);
+const ws = new WebSocket(`${location.protocol === 'https:' ? 'wss' : 'ws'}://${location.host}/ws`);
+
 
 function doSearch() {
   const query = document.getElementById("searchBox").value.trim();
