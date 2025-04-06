@@ -12,7 +12,7 @@ from starlette.templating import Jinja2Templates
 from starlette.requests import Request
 from starlette.staticfiles import StaticFiles
 
-COUCH_SERVER = "http://localhost:5984"
+COUCH_SERVER = "http://127.0.0.1:5984"
 COUCH_USER = "admin"
 COUCH_PASS = "admin"
 DB_NAME = "game_downloads"
