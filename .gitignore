@@ -1,1 +1,4 @@
 games/
+*.pyc
+__pycache__/
+*.pyo
