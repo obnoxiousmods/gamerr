@@ -14,7 +14,7 @@ from starlette.staticfiles import StaticFiles
 
 COUCH_SERVER = "http://127.0.0.1:5984"
 COUCH_USER = "admin"
-COUCH_PASS = "admin"
+COUCH_PASS = "EpicPassword123!"
 DB_NAME = "game_downloads"
 JSON_URL = "https://tinfoil.ultranx.ru/tinfoil"
 HEADERS = {"User-Agent": "Tinfoil"}
