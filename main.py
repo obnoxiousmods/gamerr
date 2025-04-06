@@ -18,7 +18,7 @@ COUCH_PASS = "admin"
 DB_NAME = "game_downloads"
 JSON_URL = "https://tinfoil.ultranx.ru/tinfoil"
 HEADERS = {"User-Agent": "Tinfoil"}
-DOWNLOAD_DIR = "games"
+DOWNLOAD_DIR = "/10TB/qbt/switch/webappDownloads"
 
 templates = Jinja2Templates(directory="templates")
 
