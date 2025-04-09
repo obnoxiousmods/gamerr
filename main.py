@@ -124,15 +124,22 @@ class DownloadSocket(WebSocketEndpoint):
             json_data = await self.app_instance.fetch_game_json()
             matches = self.app_instance.extract_matches(json_data, search_term)
             self.search_index = matches
-            await websocket.send_json({"type": "search_results", "results": matches})
-
+            try:
+                await websocket.send_json({"type": "search_results", "results": matches})
+            except Exception as e:
+                print(f"Error sending search results: {e}")
+                return
+            
         elif command == "download":
             game_id = payload.get("download")
             match = next((m for m in self.search_index if m["id"] == game_id), None)
             if not match:
-                await websocket.send_json(
-                    {"type": "download_error", "error": "Game not found."}
-                )
+                try:
+                    await websocket.send_json(
+                        {"type": "download_error", "error": "Game not found."}
+                    )
+                except Exception as e:
+                    print(f"Error sending download error: {e}")
                 return
 
             doc_id = f"dl-{uuid.uuid4()}"
@@ -144,9 +151,12 @@ class DownloadSocket(WebSocketEndpoint):
                 "url": url,
             }
 
-            await websocket.send_json(
-                {"type": "queued", "msg": f"Queued for download: {filename}"}
-            )
+            try:
+                await websocket.send_json(
+                    {"type": "queued", "msg": f"Queued for download: {filename}"}
+                )
+            except Exception as e:
+                print(f"Error sending queued message: {e}")
 
             async def queue_download():
                 async with download_limiter:
@@ -163,9 +173,12 @@ class DownloadSocket(WebSocketEndpoint):
                     except Exception as e:
                         downloads[doc_id]["status"] = "error"
                         downloads[doc_id]["error"] = str(e)
-                        await websocket.send_json(
-                            {"type": "download_error", "file": filename, "error": str(e)}
-                        )
+                        try:
+                            await websocket.send_json(
+                                {"type": "download_error", "file": filename, "error": str(e)}
+                            )
+                        except Exception as e:
+                            print(f"Error sending download error: {e}")
 
             async with anyio.create_task_group() as tg:
                 tg.start_soon(queue_download)
