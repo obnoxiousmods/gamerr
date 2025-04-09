@@ -1,0 +1,36 @@
+body {
+  background: silver;
+  padding: 2rem;
+  font-family: sans-serif;
+}
+#searchSection {
+  margin-bottom: 1rem;
+}
+.result-container {
+  max-height: 300px;
+  overflow-y: auto;
+  margin-top: 1rem;
+}
+#downloadsModal {
+  position: fixed;
+  right: 5%;
+  top: 10%;
+  width: 400px;
+  z-index: 999;
+  display: none;
+}
+
+.result-entry {
+  border-bottom: 1px solid #ccc;
+  padding: 0.5rem 0;
+  font-family: monospace;
+  word-break: break-all;
+}
+.result-entry button {
+  margin-top: 0.25rem;
+}
+
+progress {
+  width: 100%;
+  height: 20px;
+}
